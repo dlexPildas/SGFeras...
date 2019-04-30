@@ -1,0 +1,76 @@
+
+
+.aspirantes{
+    position: absolute;
+    width: 80%;
+    left: 9%;
+    top: 20%;
+    padding: 2%;
+}
+
+.editarAspirante h3{
+    text-align: center;
+    font-family: "Microsoft YaHei Light";
+    margin-bottom: 5%;
+    border-radius: 50px;
+    font-weight: bold;
+    color: white;
+}
+
+
+.tabelaAspirantes {
+    width: 70%;
+    height: 300px;
+    float: right;
+    box-shadow: 10px 10px 8px #888888;
+    border-radius: 10px;
+    border: 3px solid rgba(10, 10, 10, .3);
+    overflow: auto;
+}
+
+.tabelaAspirantes #listaBotoes{
+    display: none;
+}
+
+#botoesAspirante{
+    float: left;
+    box-shadow: 10px 10px 8px #888888;
+    border-radius: 20px;
+    width: 23%;
+}
+
+
+.aspirantes h3{
+    text-align: center;
+    font-family: "Microsoft YaHei Light";
+    margin-bottom: 10%;
+    border-radius: 50px;
+    font-weight: bold;
+    color: white;
+}
+
+@media (max-width: 1100px) {
+    #botoesAspirante{
+        display: none;
+    }
+    .tabelaAspirantes #listaBotoes{
+        display: block;
+    }
+
+    .aspirantes {
+        position: absolute;
+        left: 10%;
+    }
+
+
+}
+
+@media (max-width: 900px) {
+    .tabelaAspirantes td, #colunaC,  #colunaCp, #colunaTM {
+        display: none;
+    }
+    .aspirantes {
+        position: absolute;
+        left: 5%;
+    }
+}

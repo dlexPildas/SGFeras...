@@ -1,0 +1,130 @@
+<!--Criação da div onde será armazenado os dados das unidades e suas respectivas configurações-->
+<div class="unidades">
+    <h3 class="bg-success">Controle de Unidades</h3>
+
+    <!--Botões de configuração-->
+    <div class="list-group" id="botoesUnidade">
+        <button type="button" class="list-group-item list-group-item-action bg-success" style="color: white">
+            Opções
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#exampleModalScrollable">Cadastrar</button>
+        <button id="teste" type="button" class="list-group-item list-group-item-action">Buscar</button>
+        <button type="button" class="list-group-item list-group-item-action">Detalhar</button>
+        <button type="button" class="list-group-item list-group-item-action">Remover</button>
+    </div>
+
+
+    <!--Função só para testar algumas funcionalidades. Assim que estiver ok ela deve ser exluida-->
+
+
+    <!--Modal para realizar o cadastro das unidades-->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalScrollableTitle">Cadastro de unidade</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <form action="/admin/unidade/nova"  method="post" id="cadastrarUnidade" style="overflow: auto">
+                        <div class="modal-body">
+                            <label for="nome">Nome:</label>
+                                <input type="text" onkeyup="alteraMaiusculo(id)" name="nome" id="nome" class="form-control" required>
+                            <label for="totalMembros">Total de membros:</label>
+                                <input type="number" name="totalMembros" id="totalMembros" class="form-control" required>
+
+                            <!--Pega os aspirantes retornados do banco de dados e
+                               coloca no select do capitão e do conselheiro-->
+                            <label for="conselheiro">Conselheiro</label>
+                            <select class="form-control" name="conselheiro">
+                                <option value="">SEM CONSELHEIRO</option>
+                                {{#each aspirantes}}
+                                    <option value="{{_id}}">{{nomeAsp}}</option>
+                                {{else}}
+
+                                {{/each}}
+                            </select>
+
+                            <label for="capitão">Capitão</label>
+                            <select class="form-control" name="capitao">
+                                <option value="">SEM CAPITÃO</option>
+                                {{#each aspirantes}}
+                                    <option value="{{_id}}">{{nomeAsp}}</option>
+                                {{else}}
+
+                                {{/each}}
+                            </select>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" >Cadastrar</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--Tabela que conterá os dados das unidades-->
+    <div class="tabelaUnidades" >
+        <table class="table table-hover" style="background: white; font-size: 12px">
+
+            <thead>
+            <tr>
+                <th scope="col">Nome</th>
+                <th id="colunaC"scope="col">Conselheiro</th>
+                <th id="colunaCp" scope="col">Capitão</th>
+                <th id="colunaTM" scope="col">Total de membros</th>
+                <th scope="col">
+                    <!--Lista de botões para aparecer somente quando a tela estiver com a largura pequena-->
+                    <div class="btn-group" id="listaBotoes">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Opções
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModalScrollable">Cadastrar</a>
+                            <a class="dropdown-item" href="#">Buscar</a>
+                            <a class="dropdown-item" href="#">Detalhar</a>
+                            <a class="dropdown-item" href="#">Remover</a>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            </thead>
+
+            <!--Pega os dados retornados do banco e coloca na tabela-->
+            {{#each unidades}}
+            <tbody>
+                <tr>
+
+                    <th scope="col">{{nome}}</th>
+                    <td>{{conselheiro.nomeAsp}}</td>
+                    <td>{{capitao.nomeAsp}}</td>
+                    <td>{{totalMembros}}</td>
+                    <th>
+                        <a href="/admin/unidade/editar/{{_id}}"><button type="submit" class="btn btn-success">Editar</button></a>
+                    </th>
+                    <th>
+                        <a href="/admin/unidade/deletar/{{_id}}"><button type="submit" class="btn btn-danger">Remover</button></a>
+                    </th>
+                </tr>
+            </tbody>
+            {{else}}
+                <tbody>
+                <tr>
+                    <td colspan="4" style="text-align: center">
+                        <h2>Nenhuma unidade cadastrado</h2>
+                    </td>
+                </tr>
+                </tbody>
+            {{/each}}
+
+        </table>
+    </div>
+
+</div>
+
+

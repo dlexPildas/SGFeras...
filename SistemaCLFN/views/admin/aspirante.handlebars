@@ -1,0 +1,282 @@
+<!--Criação da div onde será armazenado os dados dos aspirantes e suas respectivas configurações-->
+<div class="aspirantes">
+    <h3 class="bg-success">Controle de Aspirante</h3>
+
+    <!--Botões de configuração-->
+    <div class="list-group" id="botoesAspirante">
+        <button type="button" class="list-group-item list-group-item-action bg-success" style="color: white">
+            Opções
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#exampleModalScrollable">Cadastrar</button>
+        <button type="button" class="list-group-item list-group-item-action">Buscar</button>
+        <button type="button" class="list-group-item list-group-item-action">Detalhar</button>
+        <button type="button" class="list-group-item list-group-item-action">Remover</button>
+    </div>
+
+
+    <!--Modal para realizar o cadastro dos Aspirantes-->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalScrollableTitle">Cadastro de aspirantes</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!--Formulário para realizar o cadastro de um aspirante-->
+                <form action="/admin/aspirante/novo" method="post" id="cadastrarAspirante" style="overflow: auto">
+                    <div class="modal-body">
+                        <!-Div contendo os nomes do aspirante e da unidade do mesmo-->
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="nomeAsp">Nome</label>
+                                <input type="text" class="form-control" id="nomeAsp" onkeyup="alteraMaiusculo(id)" name="nomeAsp" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="nomeUnidade">Unidade</label>
+                                <select id="nomeUnidade" class="form-control" name="nomeUnidade">
+                                    <option>SEM UNIDADE</option>
+                                {{#each unidades}}
+                                    <option value="{{nome}}">{{nome}}</option>
+                                {{else}}
+                                {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <!--Div contendo a função, a classe e clube local do aspirante-->
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="funcaoAsp">Função</label>
+                                <select id="funcaoAsp" class="form-control" name="funcao">
+                                    <option selected>ASPIRANTE</option>
+                                    <option>CONSELHEIRO</option>
+                                    <option>CONSELHEIRO ASS.</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="classeAsp">Classe</label>
+                                <select id="classeAsp" class="form-control" name="classe">
+                                     <option selected>AGRUPADAS (SEM CADERNO)</option>
+                                    <option>AGRUPADAS (COM CADERNO)</option>
+                                    <option>LÍDER</option>
+                                    <option>LÍDER MASTER</option>
+                                    <option>LÍDER MASTER AVANÇADO</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="nomeClubeLocal">Clube local</label>
+                                <input type="text" class="form-control" id="nomeClubeLocal" onkeyup="alteraMaiusculo(id)" name="nomeClubeLocal" required>
+                            </div>
+                        </div>
+
+                        <!--Div contendo informações se o aspirante tem uniforme de atividade e oficial ou o que falta-->
+                        <p></p>
+                        <!--class="bg-success" style="text-align: center; color: white;"-->
+                        <h6>Uniforme</h6>
+                        <div class="form-row">
+                            <!--Uniforme de atividade-->
+                            <div class="form-group col-md-4">
+                                <label for="uniformeAtividade">Uniforme Atividade</label>
+                                <select id="uniformeAtividade" class="form-control" name="uniformeAtividade">
+                                    <option selected>NÃO</option>
+                                    <option>SIM</option>
+                                </select>
+                            </div>
+                            <!--Uniforme Oficial-->
+                            <div class="form-group col-md-4">
+                                <label for="uniformeOficial">Uniforme Oficial</label>
+                                <select id="uniformeOficial" class="form-control" name="uniformeOficial">
+                                    <option selected>NÃO</option>
+                                    <option>SIM</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="oQueFaltaUniformeOficial">O que falta?</label>
+                                <input type="text" class="form-control" id="oQueFaltaUniformeOficial" onkeyup="alteraMaiusculo(id)" name="oQueFaltaUniformeOficial">
+                            </div>
+                        </div>
+
+                        <!--Div para informa a presença dos aspirantes no ano-->
+                        <p></p>
+                        <!--class="bg-success" style="text-align: center; color: white;"-->
+                        <h6>Presença</h6>
+                        <div class="form-row" >
+                            <div class="form-group col-md-1">
+                                <label for="mes1">Jan</label>
+                                <input type="checkbox" class="form-control" id="mes1" disabled name="mes1">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes2">Fev</label>
+                                <input type="checkbox" class="form-control" id="mes2" name="mes2">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes3">Mar</label>
+                                <input type="checkbox" class="form-control" id="mes3" name="mes3">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes4">Abr</label>
+                                <input type="checkbox" class="form-control" id="mes4" name="mes4">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes5">Mai</label>
+                                <input type="checkbox" class="form-control" id="mes5" disabled name="mes5">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes6">Jun</label>
+                                <input type="checkbox" class="form-control" id="mes6" name="mes6">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes7">Jul</label>
+                                <input type="checkbox" class="form-control" id="mes7" name="mes7">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes8">Ago</label>
+                                <input type="checkbox" class="form-control" id="mes8" name="mes8">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes9">Set</label>
+                                <input type="checkbox" class="form-control" id="mes9" disabled name="mes9">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes10">Out</label>
+                                <input type="checkbox" class="form-control" id="mes10" name="mes10">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes11">Nov</label>
+                                <input type="checkbox" class="form-control" id="mes11" name="mes11">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="mes12">Dez</label>
+                                <input type="checkbox" class="form-control" id="mes12" disabled name="mes12">
+                            </div>
+                        </div>
+                        <p></p>
+
+                        <!--Div para armazernar o pagamento dos aspirantes no ano-->
+                        <!--class="bg-success" style="text-align: center; color: white;"-->
+                        <h6>Pagamento</h6>
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label for="pag1">Jan</label>
+                                <input type="number" value="0" class="form-control" id="pag1" disabled name="pag1">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag2">Fev</label>
+                                <input type="number" value="0" class="form-control" id="pag2" name="pag2">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag3">Mar</label>
+                                <input type="number" value="0" class="form-control" id="pag3" name="pag3">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag4">Abr</label>
+                                <input type="number" value="0" class="form-control" id="pag4" name="pag4">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag5">Mai</label>
+                                <input type="number" value="0" class="form-control" id="pag5" disabled name="pag5">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag6">Jun</label>
+                                <input type="number" value="0" class="form-control" id="pag6" name="pag6">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag7">Jul</label>
+                                <input type="number" value="0" class="form-control" id="pag7" name="pag7">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag8">Ago</label>
+                                <input type="number" value="0" class="form-control" id="pag8" name="pag8">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag9">Set</label>
+                                <input type="number" value="0" class="form-control" id="pag9" disabled name="pag9">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag10">Out</label>
+                                <input type="number" value="0" class="form-control" id="pag10" name="pag10">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag11">Nov</label>
+                                <input type="number" value="0" class="form-control" id="pag11" name="pag11">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="pag12">Dez</label>
+                                <input type="number" value="0" class="form-control" id="pag12"  name="pag12">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--Tabela que conterá os dados das unidades-->
+    <div class="tabelaAspirantes">
+        <table class="table table-hover" style="background: white; font-size: 12px">
+
+            <thead>
+            <tr>
+                <th scope="col">Nome</th>
+                <th id="colunaC"scope="col">Unidade</th>
+                <th id="colunaCp" scope="col">Função</th>
+                <th id="colunaTM" scope="col">Classe</th>
+                <form id="buscarAsp" action="/admin/aspirante/buscar" method="post">
+                    <th scope="col"></th>
+                    <th scope="col"><input id="campo" onkeyup="alteraMaiusculo(id)" name="busca" class="form-control mr-sm-2" type="search" placeholder="digite o nome" aria-label="Search"></th>
+                </form>
+
+
+
+                <th scope="col">
+                    <!--Lista de botões para aparecer somente quando a tela estiver com a largura pequena-->
+                    <div class="btn-group" id="listaBotoes">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Opções
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModalScrollable">Cadastrar</a>
+                            <a class="dropdown-item" href="#">Editar</a>
+                            <a class="dropdown-item" href="#">Detalhar</a>
+                            <a class="dropdown-item" href="#">Remover</a>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            </thead>
+            {{#each aspirantes}}
+                <tbody>
+                    <tr>
+                        <th scope="row">{{nomeAsp}}</th>
+                        <td>{{nomeUnidade}}</td>
+                        <td>{{funcao}}</td>
+                        <td>{{classe}}</td>
+                        <th>
+                            <a href="/admin/aspirante/editar/{{_id}}"><button type="submit" class="btn btn-success">Editar</button></a>
+                        </th>
+                        <th>
+                            <a href="/admin/aspirante/remover/{{_id}}"><button type="submit" class="btn btn-danger">Remover</button></a>
+                        </th>
+                    </tr>
+                </tbody>
+            {{else}}
+                <tbody>
+                    <tr>
+                        <td colspan="4" style="text-align: center">
+                            <h2>Nenhum aspirante encontrado</h2>
+                        </td>
+                    </tr>
+                </tbody>
+            {{/each}}
+        </table>
+    </div>
+
+</div>

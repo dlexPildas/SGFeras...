@@ -1,0 +1,41 @@
+<div class="editarUnidade">
+    <h3 class="bg-success text-center col-8" style="left: 15%">Editar Unidade</h3>
+
+    <div class="card col-8 " style="left: 15%" >
+        <div class="card-body">
+
+            <!--Formulário para editar os dados da unidade-->
+            <form action="/admin/unidade/editar" method="post">
+                <input name="id" type="hidden" value="{{unidade._id}}">
+                <label for="nome">Nome:</label>
+                   <input type="text" onkeyup="alteraMaiusculo(id)" name="nome" id="nome"  value="{{unidade.nome}}" class="form-control" required>
+                <label for="totalMembros">Total de membros:</label>
+                    <input type="number" name="totalMembros" id="totalMembros" value="{{unidade.totalMembros}}" class="form-control" required>
+
+                <!--Pega os aspirantes retornados do banco de dados e coloca no select do conselheiro-->
+                <label for="conselheiro">Conselheiro:</label>
+                <select class="form-control" name="conselheiro">
+                    <option value="">SEM CONSELHEIRO</option>
+                    {{#each aspirantes}}
+                        <option value="{{_id}}">{{nomeAsp}}</option>
+                    {{else}}
+
+                    {{/each}}
+                </select>
+
+                <!--Pega os aspirantes retornados do banco de dados e coloca no select do capitão -->
+                <label for="capitão">Capitão:</label>
+                <select class="form-control" name="capitao">
+                    <option value="">SEM CAPITÃO</option>
+                    {{#each aspirantes}}
+                        <option value="{{_id}}">{{nomeAsp}}</option>
+                    {{else}}
+
+                    {{/each}}
+                </select>
+
+                <button class="btn btn-dark mt-3">Editar</button>
+            </form>
+        </div>
+    </div>
+</div>

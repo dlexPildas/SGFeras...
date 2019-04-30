@@ -1,0 +1,81 @@
+
+.unidades{
+    position: absolute;
+    width: 80%;
+    left: 9%;
+    top: 20%;
+    padding: 2%;
+
+}
+
+.tabelaUnidades {
+    width: 70%;
+    float: right;
+    height: 300px;
+    box-shadow: 10px 10px 8px #888888;
+    border-radius: 10px;
+    border: 3px solid rgba(10, 10, 10, .3);
+    cursor: pointer;
+    overflow: auto;
+}
+
+.tabelaUnidades #listaBotoes{
+    display: none;
+}
+
+#botoesUnidade{
+    float: left;
+    box-shadow: 10px 10px 8px #888888;
+    border-radius: 20px;
+    width: 23%;
+}
+
+
+.unidades h3{
+    text-align: center;
+    font-family: "Microsoft YaHei Light";
+    margin-bottom: 10%;
+    border-radius: 50px;
+    font-weight: bold;
+    color: white;
+}
+
+.editarUnidade h3{
+    text-align: center;
+    font-family: "Microsoft YaHei Light";
+    margin-bottom: 5%;
+    border-radius: 50px;
+    font-weight: bold;
+    color: white;
+}
+
+@media (max-width: 1220px) {
+    #botoesUnidade{
+        display: none;
+    }
+    .tabelaUnidades #listaBotoes{
+        display: block;
+    }
+    .unidades {
+        position: absolute;
+        left: 10%;
+    }
+
+}
+
+@media (max-width: 900px) {
+    .tabelaUnidades td, #colunaC,  #colunaCp, #colunaTM {
+        display: none;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+

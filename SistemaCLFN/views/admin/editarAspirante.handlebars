@@ -1,0 +1,238 @@
+<!--suppress ALL -->
+<div class="editarAspirante ">
+    <h3 class="bg-success text-center col-8 " style="left: 15%">Editar Aspirante</h3>
+    <div class="card">
+        <div class="card-body ">
+            <!--Formulário para realizar a edição do cadastro de um aspirante-->
+            <form action="/admin/aspirante/editar" method="post"  style="overflow: auto">
+                <div class="modal-body">
+                    <!-Div contendo os nomes do aspirante e da unidade do mesmo-->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="nomeAsp">Nome</label>
+                            <input name="id" type="hidden" value="{{aspirante._id}}"><!--guarda o id do aspirante que será editado o cadastro-->
+                            <input onkeyup="alteraMaiusculo(id)"type="text" class="form-control" id="nomeAsp" name="nomeAsp" value="{{aspirante.nomeAsp}}" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="nomeUnidade">Unidade</label>
+                            <input id="aspNomeUnidade" type="hidden" value="{{aspirante.nomeUnidade}}">
+                            <select id="nomeUnidade" class="form-control" name="nomeUnidade">
+                                <option>SEM UNIDADE</option>
+                                {{#each unidades}}
+                                    <option value="{{nome}}">{{nome}}</option>
+                                {{else}}
+
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <!--Div contendo a função, a classe e clube local do aspirante-->
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="funcaoAsp">Função</label>
+                            <input id="aspFuncao" type="hidden" value="{{aspirante.funcao}}">
+                            <select id="funcaoAsp" class="form-control" name="funcao">
+                                <option selected>ASPIRANTE</option>
+                                <option>CONSELHEIRO</option>
+                                <option>CONSELHEIRO ASS.</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="classeAsp">Classe</label>
+                            <input id="aspClasse" type="hidden" value="{{aspirante.classe}}">
+                            <select id="classeAsp" class="form-control" name="classe">
+                                <option selected>AGRUPADAS (SEM CADERNO)</option>
+                                <option>AGRUPADAS (COM CADERNO)</option>
+                                <option>LÍDER</option>
+                                <option>LÍDER MASTER</option>
+                                <option>LÍDER MASTER AVANÇ.</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="nomeClubeLocal">Clube local</label>
+                            <input type="text" onkeyup="alteraMaiusculo(id)" class="form-control" id="nomeClubeLocal" name="nomeClubeLocal" value="{{aspirante.clubeLocal}}" required>
+                        </div>
+                    </div>
+
+                    <!--Div contendo informações se o aspirante tem uniforme de atividade e oficial ou o que falta-->
+                    <p></p>
+                    <!--class="bg-success" style="text-align: center; color: white;"-->
+                    <h6>Uniforme</h6>
+                    <div class="form-row">
+                        <!--Uniforme de atividade-->
+                        <div class="form-group col-md-4">
+                            <label for="uniformeAtividade">Uniforme Atividade</label>
+                            <input id="aspUniformeAtividade" type="hidden" value="{{aspirante.uniformeAtividade}}">
+                            <select id="uniformeAtividade" class="form-control" name="uniformeAtividade">
+                                <option selected>NÃO</option>
+                                <option>SIM</option>
+                            </select>
+                        </div>
+                        <!--Uniforme Oficial-->
+                        <div class="form-group col-md-4">
+                            <label for="uniformeOficial">Uniforme Oficial</label>
+                            <input id="aspUniformeOficial" type="hidden" value="{{aspirante.uniformeOficial}}">
+                            <select id="uniformeOficial" class="form-control" name="uniformeOficial">
+                                <option selected>NÃO</option>
+                                <option>SIM</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="oQueFaltaUniformeOficial">O que falta?</label>
+                            <input type="text" onkeyup="alteraMaiusculo(id)" class="form-control" id="oQueFaltaUniformeOficial" name="oQueFaltaUniformeOficial" value="{{aspirante.oQueFalta}}">
+                        </div>
+                    </div>
+
+                    <!--Div para informa a presença dos aspirantes no ano-->
+                    <p></p>
+                    <!--class="bg-success" style="text-align: center; color: white;"-->
+                    <h6>Presença</h6>
+                    <div class="form-row" >
+                        <div class="form-group col-md-1">
+                            <label for="mes1">Jan</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes1" disabled name="mes1" >
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes2">Fev</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes2" name="mes2">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes3">Mar</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes3" name="mes3" >
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes4">Abr</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes4" name="mes4" >
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes5">Mai</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes5" disabled name="mes5">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes6">Jun</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes6" name="mes6">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes7">Jul</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes7" name="mes7">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes8">Ago</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes8" name="mes8">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes9">Set</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes9" disabled name="mes9">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes10">Out</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes10" name="mes10">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes11">Nov</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes11" name="mes11">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="mes12">Dez</label>
+                            <input atributo-mes type="checkbox" class="form-control" id="mes12" disabled name="mes12">
+                        </div>
+                    </div>
+                    <p></p>
+
+                    <!--Div para armazernar o pagamento dos aspirantes no ano-->
+                    <!--class="bg-success" style="text-align: center; color: white;"-->
+                    <h6>Pagamento</h6>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label for="pag1">Jan</label>
+                            <input type="number" value="{{pagamento.jan}}" class="form-control" id="pag1" disabled name="pag1">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag2">Fev</label>
+                            <input type="number" value="{{pagamento.fev}}" class="form-control" id="pag2" name="pag2" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag3">Mar</label>
+                            <input type="number" value="{{pagamento.mar}}" class="form-control" id="pag3" name="pag3" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag4">Abr</label>
+                            <input type="number" value="{{pagamento.abr}}" class="form-control" id="pag4" name="pag4" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag5">Mai</label>
+                            <input type="number" value="{{pagamento.mai}}" class="form-control" id="pag5" disabled name="pag5">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag6">Jun</label>
+                            <input type="number" value="{{pagamento.jun}}" class="form-control" id="pag6" name="pag6" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag7">Jul</label>
+                            <input type="number" value="{{pagamento.jul}}" class="form-control" id="pag7" name="pag7" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag8">Ago</label>
+                            <input type="number" value="{{pagamento.ago}}" class="form-control" id="pag8" name="pag8" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag9">Set</label>
+                            <input type="number" value="{{pagamento.set}}" class="form-control" id="pag9" disabled name="pag9" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag10">Out</label>
+                            <input type="number" value="{{pagamento.out}}" class="form-control" id="pag10" name="pag10" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag11">Nov</label>
+                            <input type="number" value="{{pagamento.nov}}" class="form-control" id="pag11" name="pag11" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="pag12">Dez</label>
+                            <input type="number" value="{{pagamento.dez}}" class="form-control" id="pag12"  name="pag12" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Editar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        validaCheckbox()
+
+
+        //função para validar o checkbox
+        function validaCheckbox() {
+
+            const vetor = []
+            vetor.push({{presenca.jan}})
+            vetor.push({{presenca.fev}})
+            vetor.push({{presenca.mar}})
+            vetor.push({{presenca.abr}})
+            vetor.push({{presenca.mai}})
+            vetor.push({{presenca.jun}})
+            vetor.push({{presenca.jul}})
+            vetor.push({{presenca.ago}})
+            vetor.push({{presenca.set}})
+            vetor.push({{presenca.out}})
+            vetor.push({{presenca.nov}})
+            vetor.push({{presenca.dez}})
+
+            //pega todos os inputs checkbox com atributo (atributo-mes) retornando um array
+            const meses = document.querySelectorAll('[atributo-mes]')
+            var aux
+            //percorre o array meses junto com o array presencas e faz a verificação se a presença é true ou false
+            meses.forEach((mes, i)=>{
+
+                //se a presenca for true, ele marca o respectivo checkbox
+                if (vetor[i] == true){
+                    mes.checked = true
+                }
+            })
+        }
+
+    </script>
+</div>
