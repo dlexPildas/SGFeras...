@@ -36,6 +36,10 @@ const Aspirante = new Schema({
     eDirecao:{
         type: Boolean,
         default: false
+    },
+    senha:{
+        type: String,
+        default: 'feras123'
     }
 
 })

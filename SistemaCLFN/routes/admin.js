@@ -9,7 +9,7 @@ const Unidade = mongoose.model('unidades')
 const Aspirante = mongoose.model('aspirantes')
 const Presenca = mongoose.model('presencas')
 const Pagamento = mongoose.model('pagamentos')
-
+const {eAdmin} = require('../helpers/eAdmin')
 
 
 //rota para tela inicial
@@ -22,7 +22,7 @@ router.get("/", (req, res)=>{
 //--------------ROTAS VOLTADAS PARA UNIDADES----------------//
 
 //rota para ir a tela de unidades
-router.get('/unidade', (req, res)=>{
+router.get('/unidade', eAdmin, (req, res)=>{
 
     //Faz a busca das unidades no banco e pega todas as tabelas relacionadas ao a tabela unidade
     Unidade.find().sort({nome: 1}).populate('conselheiro').populate('capitao').then((unidades)=>{
@@ -44,7 +44,7 @@ router.get('/unidade', (req, res)=>{
 })
 
 //rota para salvar uma unidade
-router.post('/unidade/nova', (req, res)=>{
+router.post('/unidade/nova', eAdmin, (req, res)=>{
     const novaUnidade = new Object()
 
     //verifica se tem conselheiro ou capitão cadastrado e acrescenta ao objeto
@@ -68,7 +68,7 @@ router.post('/unidade/nova', (req, res)=>{
 })
 
 //rota para deletar uma unidade
-router.get('/unidade/deletar/:id', (req, res)=>{
+router.get('/unidade/deletar/:id', eAdmin, (req, res)=>{
     Unidade.remove({_id: req.params.id}).then(()=>{
         res.redirect('/admin/unidade')
     }).catch((erro)=>{
@@ -77,7 +77,7 @@ router.get('/unidade/deletar/:id', (req, res)=>{
 })
 
 //rota para editar uma unidade
-router.get('/unidade/editar/:id', (req, res)=>{
+router.get('/unidade/editar/:id', eAdmin, (req, res)=>{
     Unidade.findOne({_id: req.params.id}).then((unidade)=>{
         if(unidade){
             Aspirante.find().then((aspirantes)=>{
@@ -94,7 +94,7 @@ router.get('/unidade/editar/:id', (req, res)=>{
 })
 
 //rota para salvar os dados editados no banco
-router.post('/unidade/editar', (req, res) =>{
+router.post('/unidade/editar', eAdmin, (req, res) =>{
     Unidade.findOne({_id: req.body.id}).then((unidade)=>{
         //verrifica se a unidade foi encontrada
         if (unidade){
@@ -129,7 +129,7 @@ router.post('/unidade/editar', (req, res) =>{
 
 
 //--------------ROTAS VOLTADAS PARA ASPIRANTES----------------//
-router.get('/aspirante', (req, res)=>{
+router.get('/aspirante', eAdmin, (req, res)=>{
     Unidade.find().then((unidades)=>{
         Aspirante.find().sort({nomeAsp: 1}).then((aspirantes)=>{
             res.render('admin/aspirante', {unidades: unidades, aspirantes: aspirantes})
@@ -143,7 +143,7 @@ router.get('/aspirante', (req, res)=>{
 })
 
 //rota para buscar algum aspirante
-router.post('/aspirante/buscar', (req, res)=>{
+router.post('/aspirante/buscar', eAdmin, (req, res)=>{
     Unidade.find().then((unidades)=>{
         Aspirante.find({nomeAsp: {$regex: req.body.busca} }).sort({nomeAsp: 1}).then((aspirantes)=>{
             res.render('admin/aspirante', {unidades: unidades, aspirantes: aspirantes})
@@ -156,7 +156,7 @@ router.post('/aspirante/buscar', (req, res)=>{
 })
 
 //rota para adicionar um novo aspirante
-router.post('/aspirante/novo', (req, res)=>{
+router.post('/aspirante/novo', eAdmin, (req, res)=>{
 
     //cria um objeto "aspirante" com os dados retornados
     const aspirante = {
@@ -256,7 +256,7 @@ router.post('/aspirante/novo', (req, res)=>{
 })
 
 //rota para remover um aspirante
-router.get('/aspirante/remover/:id', (req, res)=>{
+router.get('/aspirante/remover/:id', eAdmin, (req, res)=>{
     Aspirante.remove({_id: req.params.id}).then(()=>{
         Presenca.remove({aspirante: req.params.id}).then(()=>{
             Pagamento.remove({aspirante: req.params.id}).then(()=>{
@@ -273,7 +273,7 @@ router.get('/aspirante/remover/:id', (req, res)=>{
 })
 
 //rota para editar os dados de um aspirante
-router.get('/aspirante/editar/:id', (req, res)=>{
+router.get('/aspirante/editar/:id',  eAdmin,(req, res)=>{
     Aspirante.findOne({_id: req.params.id}).then((aspirante)=>{
         Presenca.findOne({aspirante: req.params.id}).then((presenca)=>{
             Pagamento.findOne({aspirante: req.params.id}).then((pagamento)=>{
@@ -293,7 +293,7 @@ router.get('/aspirante/editar/:id', (req, res)=>{
 
 
 //rota para pegar os novos dados do aspirante e salvá-los no banco de dados
-router.post('/aspirante/editar', (req, res)=>{
+router.post('/aspirante/editar', eAdmin, (req, res)=>{
     Aspirante.findOne({_id: req.body.id}).then((aspirante)=>{
         Presenca.findOne({aspirante: req.body.id}).then((presenca)=>{
             Pagamento.findOne({aspirante: req.body.id}).then((pagamento)=>{
@@ -368,6 +368,10 @@ router.post('/aspirante/editar', (req, res)=>{
     })
 })
 
+
+
+
+//----------------FUNÇÕES----------------------------
 
 //função para validar os meses, pois o valor retornado pelo checkbox não é do tipo booleano
 function validarMeses(validar){

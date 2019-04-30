@@ -7,7 +7,9 @@ const session = require('express-session')
 const flash  = require('connect-flash')
 const app = express()
 const admin = require('./routes/admin')
-
+const usuario = require('./routes/usuario')
+const passport = require('passport')
+require('./config/auth')(passport)
 
 //session
 app.use(session({
@@ -16,13 +18,17 @@ app.use(session({
     saveUninitialized: true
 }))
 
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use(flash())
 
 //middleware
 app.use((req, res, next)=>{
     res.locals.success_msg = req.flash('success_msg')
     res.locals.error_msg = req.flash('error_msg')
-    //res.locals.error = req.flash('error')
+    res.locals.error = req.flash('error')
+    res.locals.user = req.user || null
     next()
 })
 
@@ -53,11 +59,9 @@ app.get('/', (req, res)=>{
     res.render('index')
 })
 
-app.get('/login', (req, res)=>{
-    res.render('login')
-})
 
 app.use('/admin', admin)
+app.use('/usuario', usuario)
 
 
 //Outros

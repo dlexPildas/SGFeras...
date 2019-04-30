@@ -19,8 +19,13 @@
                 <a href="/"> <button class="btn btn-outline-success my-2 my-sm-0" type="submit" disabled>Relatórios</button> </a>
             </li>
         </ul>
-        <span class="navbar-text">Versão beta do sistema</span>
-        <button style="margin: 10px"  class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
 
+        {{#if user}}
+            <span class="navbar-text">Bem vindo, <span style="font-family: Calibri; color: #1e7e34">{{user.nomeAsp}}</span></span>
+            <a href="/usuario/logout"> <button style="margin: 10px"  class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button> </a>
+        {{else}}
+            <span class="navbar-text">Versão beta do sistema</span>
+            <a href="/usuario/login"> <button style="margin: 10px"  class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button> </a>
+        {{/if}}
     </div>
 </nav>
