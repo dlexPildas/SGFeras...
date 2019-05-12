@@ -7,8 +7,8 @@ const Aspirante = new Schema({
         required: true
     },
     nomeUnidade: {
-        type:String,
-        required: true
+        type:Schema.Types.ObjectId,
+        ref: 'unidades'
     },
     funcao: {
         type:String,

@@ -5,7 +5,7 @@
         <div class="card-body">
 
             <!--Formulário para editar os dados da unidade-->
-            <form action="/admin/unidade/editar" method="post">
+            <form action="/admin/unidade/editar" method="post" onsubmit="return verificaConselheiroIgualCapitao()">
                 <input name="id" type="hidden" value="{{unidade._id}}">
                 <label for="nome">Nome:</label>
                    <input type="text" onkeyup="alteraMaiusculo(id)" name="nome" id="nome"  value="{{unidade.nome}}" class="form-control" required>
@@ -14,7 +14,7 @@
 
                 <!--Pega os aspirantes retornados do banco de dados e coloca no select do conselheiro-->
                 <label for="conselheiro">Conselheiro:</label>
-                <select class="form-control" name="conselheiro">
+                <select id="conselheiro" class="form-control" name="conselheiro">
                     <option value="">SEM CONSELHEIRO</option>
                     {{#each aspirantes}}
                         <option value="{{_id}}">{{nomeAsp}}</option>
@@ -25,7 +25,7 @@
 
                 <!--Pega os aspirantes retornados do banco de dados e coloca no select do capitão -->
                 <label for="capitão">Capitão:</label>
-                <select class="form-control" name="capitao">
+                <select id="capitao" class="form-control" name="capitao">
                     <option value="">SEM CAPITÃO</option>
                     {{#each aspirantes}}
                         <option value="{{_id}}">{{nomeAsp}}</option>

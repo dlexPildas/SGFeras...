@@ -9,7 +9,11 @@ const app = express()
 const admin = require('./routes/admin')
 const usuario = require('./routes/usuario')
 const passport = require('passport')
+const fetch = require('node-fetch');
+
 require('./config/auth')(passport)
+
+const db = require('./config/db')
 
 //session
 app.use(session({
@@ -44,11 +48,13 @@ app.set('view engine', 'handlebars')
 
 //mongo
 mongoose.Promisse = global.Promisse
-mongoose.connect('mongodb://localhost/clfn').then(()=>{
-    console.log('conectado');
+mongoose.connect('mongodb://clfn:leinad10011.@mongodb.uhserver.com:27017/clfn', {useNewUrlParser: true}).then((msg)=>{
+    console.log('conectado: '+msg);
 }).catch((erro)=>{
-    console.log('Não conectado: '+erro);
+    console.log('Não conectado: '+erro );
 })
+
+
 
 //Public
 app.use(express.static(path.join(__dirname, "public")))
@@ -56,6 +62,7 @@ app.use(express.static(path.join(__dirname, "public")))
 
 /*------------------ROTAS--------------------*/
 app.get('/', (req, res)=>{
+
     res.render('index')
 })
 
@@ -65,8 +72,9 @@ app.use('/usuario', usuario)
 
 
 //Outros
-const porta = 8083
+const porta = process.env.PORT || 8083
 app.listen(porta, ()=>{
-    console.log('Servidor rodando')
+    console.log('Servidor rodando: '+porta)
+
 })
 

@@ -8,6 +8,10 @@
             <li class="nav-item active" style="margin: 10px">
                 <a href="/"> <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Inicio</button> </a>
             </li>
+
+
+
+        {{#if user}}
             <li class="nav-item active" style="margin: 10px">
                 <a href="/admin/unidade"> <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Unidades</button> </a>
             </li>
@@ -16,14 +20,14 @@
                 <a href="/admin/aspirante"> <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Aspirantes</button> </a>
             </li>
             <li class="nav-item active" style="margin: 10px">
-                <a href="/"> <button class="btn btn-outline-success my-2 my-sm-0" type="submit" disabled>Relatórios</button> </a>
+                <a href="/admin/relatorios"> <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Relatórios</button> </a>
             </li>
         </ul>
-
-        {{#if user}}
             <span class="navbar-text">Bem vindo, <span style="font-family: Calibri; color: #1e7e34">{{user.nomeAsp}}</span></span>
             <a href="/usuario/logout"> <button style="margin: 10px"  class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button> </a>
+
         {{else}}
+            </ul>
             <span class="navbar-text">Versão beta do sistema</span>
             <a href="/usuario/login"> <button style="margin: 10px"  class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button> </a>
         {{/if}}

@@ -10,6 +10,7 @@ const Aspirante = mongoose.model('aspirantes')
 const Presenca = mongoose.model('presencas')
 const Pagamento = mongoose.model('pagamentos')
 const {eAdmin} = require('../helpers/eAdmin')
+const funcoes = require('../public/js/funcoes')
 
 
 //rota para tela inicial
@@ -28,7 +29,7 @@ router.get('/unidade', eAdmin, (req, res)=>{
     Unidade.find().sort({nome: 1}).populate('conselheiro').populate('capitao').then((unidades)=>{
         if(unidades){ //Verifica se há uma unidade
             //faz a busca pela tabela aspirante
-            Aspirante.find().then((aspirantes)=>{
+            Aspirante.find({nomeUnidade: null}).then((aspirantes)=>{
                 res.render('admin/unidade', {unidades: unidades, aspirantes: aspirantes})
             }).catch((erro)=>{
                 console.log('Erro ao procurar um aspirante: '+erro)
@@ -52,15 +53,17 @@ router.post('/unidade/nova', eAdmin, (req, res)=>{
         novaUnidade.nome = req.body.nome
         novaUnidade.conselheiro = req.body.conselheiro
         novaUnidade.capitao = req.body.capitao
-        novaUnidade.totalMembros = req.body.totalMembros
+        novaUnidade.totalMembros = 0
 
     }else{
         novaUnidade.nome = req.body.nome
-        novaUnidade.totalMembros = req.body.totalMembros
+        novaUnidade.totalMembros = 0
     }
+
 
     //Cria um novo registro de unidade
     new Unidade(novaUnidade).save().then(()=>{
+        req.flash('success_msg', 'O unidade '+novaUnidade.nome+' foi criada com sucesso!')
         res.redirect('/admin/unidade')
     }).catch( (erro)=>{
         console.log('Erro ao salvar a unidade: '+erro)
@@ -68,8 +71,11 @@ router.post('/unidade/nova', eAdmin, (req, res)=>{
 })
 
 //rota para deletar uma unidade
-router.get('/unidade/deletar/:id', eAdmin, (req, res)=>{
-    Unidade.remove({_id: req.params.id}).then(()=>{
+router.get('/unidade/deletar/:id', eAdmin,(req, res)=>{
+
+
+    Unidade.deleteOne({_id: req.params.id}).then(()=>{
+        req.flash('success_msg', 'A unidade foi removida com sucesso!')
         res.redirect('/admin/unidade')
     }).catch((erro)=>{
         res.redirect('/admin/unidade')
@@ -77,10 +83,10 @@ router.get('/unidade/deletar/:id', eAdmin, (req, res)=>{
 })
 
 //rota para editar uma unidade
-router.get('/unidade/editar/:id', eAdmin, (req, res)=>{
+router.get('/unidade/editar/:id',  eAdmin,(req, res)=>{
     Unidade.findOne({_id: req.params.id}).then((unidade)=>{
         if(unidade){
-            Aspirante.find().then((aspirantes)=>{
+            Aspirante.find({nomeUnidade: unidade._id}).then((aspirantes)=>{
                 res.render('admin/editarUnidade', {unidade: unidade, aspirantes: aspirantes})
             }).catch((erro)=>{
                 console.log('Erro ao procurar um aspirante: '+erro)
@@ -94,7 +100,7 @@ router.get('/unidade/editar/:id', eAdmin, (req, res)=>{
 })
 
 //rota para salvar os dados editados no banco
-router.post('/unidade/editar', eAdmin, (req, res) =>{
+router.post('/unidade/editar',  eAdmin,(req, res) =>{
     Unidade.findOne({_id: req.body.id}).then((unidade)=>{
         //verrifica se a unidade foi encontrada
         if (unidade){
@@ -117,10 +123,11 @@ router.post('/unidade/editar', eAdmin, (req, res) =>{
             }
 
             //edita os dados da unidade no banco de dados
-            unidade.save().then(()=>{
+            unidade.save().then((unidade)=>{
+                req.flash('success_msg', 'A unidade '+unidade.nome+' foi editada com sucesso!')
                 res.redirect('/admin/unidade')
             }).catch((erro) =>{
-                console.log('Erro ao editar unidade: '+erro)
+                req.flash('erro_msg', 'A unidade '+novaUnidade.nome+' não foi editada com sucesso!')
                 res.redirect('/admin/unidade')
             })
         }
@@ -128,10 +135,32 @@ router.post('/unidade/editar', eAdmin, (req, res) =>{
 })
 
 
+//Rota para visualizar um unidades e seus dados
+router.get('/unidade/detalhes/:nome', eAdmin, (req, res)=>{
+    Unidade.findOne({_id: req.params.nome}).populate('conselheiro').populate('capitao').then((unidade)=>{
+
+        Aspirante.find({nomeUnidade: req.params.nome}).populate('nomeUnidade').then((aspirantes)=>{
+            if (aspirantes.length==0){
+                req.flash("error_msg", 'Unidade sem aspirante!')
+                res.redirect('/admin/unidade')
+            }else{
+
+                res.render('admin/visualizarUnidade', {unidade: unidade, aspirantes: aspirantes})
+            }
+        }).catch((erro)=>{
+            console.log('Erro ao busca aspirantes: '+erro)
+        })
+        //console.log(unidade)
+    }).catch((erro)=>{
+        console.log('Erro ao busca unidade: '+erro)
+    })
+})
+
+
 //--------------ROTAS VOLTADAS PARA ASPIRANTES----------------//
-router.get('/aspirante', eAdmin, (req, res)=>{
+router.get('/aspirante',  eAdmin,(req, res)=>{
     Unidade.find().then((unidades)=>{
-        Aspirante.find().sort({nomeAsp: 1}).then((aspirantes)=>{
+        Aspirante.find({nomeAsp: {$ne: "MASTER"}}).populate('nomeUnidade').sort({nomeAsp: 1}).then((aspirantes)=>{
             res.render('admin/aspirante', {unidades: unidades, aspirantes: aspirantes})
         }).catch((erro)=>{
             console.log('erro ao buscar os aspirantes: '+erro)
@@ -145,7 +174,7 @@ router.get('/aspirante', eAdmin, (req, res)=>{
 //rota para buscar algum aspirante
 router.post('/aspirante/buscar', eAdmin, (req, res)=>{
     Unidade.find().then((unidades)=>{
-        Aspirante.find({nomeAsp: {$regex: req.body.busca} }).sort({nomeAsp: 1}).then((aspirantes)=>{
+        Aspirante.find({nomeAsp: {$regex: req.body.busca} }).sort({nomeAsp: 1}).populate('nomeUnidade').then((aspirantes)=>{
             res.render('admin/aspirante', {unidades: unidades, aspirantes: aspirantes})
         }).catch((erro)=>{
             console.log('erro ao buscar os aspirantes: '+erro)
@@ -156,12 +185,14 @@ router.post('/aspirante/buscar', eAdmin, (req, res)=>{
 })
 
 //rota para adicionar um novo aspirante
-router.post('/aspirante/novo', eAdmin, (req, res)=>{
+router.post('/aspirante/novo',  eAdmin,(req, res)=>{
+
+    const nUnidade = req.body.nomeUnidade == 'SEM UNIDADE'? null: req.body.nomeUnidade
 
     //cria um objeto "aspirante" com os dados retornados
     const aspirante = {
         nomeAsp: req.body.nomeAsp,
-        nomeUnidade: req.body.nomeUnidade,
+        nomeUnidade: nUnidade,
         funcao: req.body.funcao,
         classe: req.body.classe,
         clubeLocal: req.body.nomeClubeLocal,
@@ -214,7 +245,7 @@ router.post('/aspirante/novo', eAdmin, (req, res)=>{
                 validar2[i] = 0
             }else{
                 validar2[i] = parseInt(validar2[i], 10)
-                console.log(validar2[i])
+
             }
         }
 
@@ -241,6 +272,7 @@ router.post('/aspirante/novo', eAdmin, (req, res)=>{
 
             //salva no banco de dados um novo registro da collection pagamentos
             new Pagamento(pagamento).save().then(()=>{
+                req.flash('success_msg', 'Aspirante '+aspirante.nomeAsp+' criado com sucesso!')
                 res.redirect('/admin/aspirante')
             }).catch((erro)=>{
                 console.log('Erro ao salvar o pagamento: '+erro)
@@ -256,10 +288,11 @@ router.post('/aspirante/novo', eAdmin, (req, res)=>{
 })
 
 //rota para remover um aspirante
-router.get('/aspirante/remover/:id', eAdmin, (req, res)=>{
+router.get('/aspirante/remover/:id', eAdmin,(req, res)=>{
     Aspirante.remove({_id: req.params.id}).then(()=>{
         Presenca.remove({aspirante: req.params.id}).then(()=>{
             Pagamento.remove({aspirante: req.params.id}).then(()=>{
+                req.flash('success_msg', 'Aspirante removido com sucesso!')
                 res.redirect('/admin/aspirante')
             }).catch((erro)=>{
                 console.log('Erro ao excluir um pagamento: '+erro)
@@ -273,7 +306,7 @@ router.get('/aspirante/remover/:id', eAdmin, (req, res)=>{
 })
 
 //rota para editar os dados de um aspirante
-router.get('/aspirante/editar/:id',  eAdmin,(req, res)=>{
+router.get('/aspirante/editar/:id', eAdmin,(req, res)=>{
     Aspirante.findOne({_id: req.params.id}).then((aspirante)=>{
         Presenca.findOne({aspirante: req.params.id}).then((presenca)=>{
             Pagamento.findOne({aspirante: req.params.id}).then((pagamento)=>{
@@ -293,14 +326,16 @@ router.get('/aspirante/editar/:id',  eAdmin,(req, res)=>{
 
 
 //rota para pegar os novos dados do aspirante e salvá-los no banco de dados
-router.post('/aspirante/editar', eAdmin, (req, res)=>{
+router.post('/aspirante/editar', eAdmin,(req, res)=>{
     Aspirante.findOne({_id: req.body.id}).then((aspirante)=>{
         Presenca.findOne({aspirante: req.body.id}).then((presenca)=>{
             Pagamento.findOne({aspirante: req.body.id}).then((pagamento)=>{
 
+                const nUnidade = req.body.nomeUnidade == 'SEM UNIDADE'? null: req.body.nomeUnidade
+
                 //Coloca os novos dados dos aspirantes no registro e salva
                 aspirante.nomeAsp = req.body.nomeAsp
-                aspirante.nomeUnidade = req.body.nomeUnidade
+                aspirante.nomeUnidade = nUnidade
                 aspirante.funcao = req.body.funcao
                 aspirante.classe = req.body.classe
                 aspirante.clubeLocal = req.body.nomeClubeLocal
@@ -346,7 +381,67 @@ router.post('/aspirante/editar', eAdmin, (req, res)=>{
                         pagamento.out = result[9]
                         pagamento.nov = result[10]
                         pagamento.dez = result[11]
+
                         pagamento.save().then(()=>{
+
+                            //Verifica se o aspirante editado é conselheiro de alguma unidade
+                            Unidade.findOne({conselheiro: req.body.id}).then((unidade)=>{
+                                //se foi encontradada uma unidade
+                                if (unidade){
+
+                                    //Verifica se o aspirante pertence a alguma unidade
+                                    if (nUnidade != null){
+                                        //verifica se o aspirante continua na mesma unidade. Se sim, ele não edita a unidade
+                                        if (unidade._id.equals(aspirante.nomeUnidade._id)){
+                                            console.log('o Aspirante pertence a mesma unidade')
+                                        }
+                                        //se não, ele deixa a unidade sem conselheiro
+                                        else{
+                                            unidade.conselheiro = nUnidade
+                                        }
+                                    }else{
+                                        unidade.conselheiro = nUnidade
+                                    }
+                                    //salva os dados editado da unidade
+                                    unidade.save().then(()=>{
+                                    }).catch((erro)=>{
+                                        console.log('Não alteramos a unidade (conselheiro): '+erro)
+                                    })
+                                }
+                            }).catch((erro)=>{
+                                console.log('Erro ao encontrar unidade (conselheiro): '+erro)
+                            })
+
+
+                            //Verifica se o aspirante editado é conselheiro de alguma unidade
+                            Unidade.findOne({capitao: req.body.id}).then((unidade)=>{
+                                //se foi encontradada uma unidade
+                                if (unidade){
+
+                                    //Verifica se o aspirante pertence a alguma unidade
+                                    if (nUnidade != null){
+                                        //verifica se o aspirante continua na mesma unidade. Se sim, ele não edita a unidade
+                                        if (unidade._id.equals(aspirante.nomeUnidade._id)){
+                                            console.log('o Aspirante pertence a mesma unidade')
+                                        }
+                                        //se não, ele deixa a unidade sem conselheiro
+                                        else{
+                                            unidade.capitao = nUnidade
+                                        }
+                                    }else{
+                                        unidade.capitao = nUnidade
+                                    }
+                                    //salva os dados editado da unidade
+                                    unidade.save().then(()=>{
+                                    }).catch((erro)=>{
+                                        console.log('Não alteramos a unidade (conselheiro): '+erro)
+                                    })
+                                }
+                            }).catch((erro)=>{
+                                console.log('Erro ao encontrar unidade (conselheiro): '+erro)
+                            })
+
+                            req.flash('success_msg', 'Aspirante '+aspirante.nomeAsp+' editado com sucesso!')
                             res.redirect('/admin/aspirante')
                         }).catch((erro)=>{
                             console.log('Não foi possível alterar o pagamento: '+erro)
@@ -369,7 +464,13 @@ router.post('/aspirante/editar', eAdmin, (req, res)=>{
 })
 
 
+//----------------ROTAS PARA RELATÓRIOS---------------//
 
+router.get('/relatorios', (req, res)=>{
+    Pagamento.aggregate([{$group: {_id: "$_id", soma:{$sum: "mar"}}}]).then((result)=>{
+
+    })
+})
 
 //----------------FUNÇÕES----------------------------
 

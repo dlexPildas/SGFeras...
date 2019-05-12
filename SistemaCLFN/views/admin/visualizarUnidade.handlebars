@@ -1,0 +1,73 @@
+
+
+
+
+
+<div class="row">
+    <div id="visualizarUnidade" class="col-7 offset-2">
+        <h3 class="mt-4 mb-5 text-center bg-success">Visualizar unidade {{unidade.nome}} </h3>
+
+        <!--Linha para mostrar o conselheiro-->
+        <div class="row mb-5">
+            <div class="col-12 ">
+                <label for="conselheiro"> <h4>Conselheiro(a):</h4></label>
+                <input class="form-control" type="text" name="conselheiro" value="{{unidade.conselheiro.nomeAsp}}" disabled>
+            </div>
+        </div>
+
+        <!--Linha para mostrar o capitão-->
+        <div class="row mb-5">
+            <div class="col-12 ">
+                <label for="capitao"> <h4>Capitã(o):</h4></label>
+                <input class="form-control" type="text" name="capitao" value="{{unidade.capitao.nomeAsp}}" disabled>
+            </div>
+        </div>
+
+        <!--Linha para conter a tabela com todos os membros-->
+        <div class="row">
+            <table class="table table-hover " style="background: white; font-size: 12px">
+
+                <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th id="colunaC"scope="col">Unidade</th>
+                    <th id="colunaCp" scope="col">Função</th>
+                    <th id="colunaTM" scope="col">Classe</th>
+
+                </tr>
+                </thead>
+                {{#each aspirantes}}
+
+                    <tbody>
+                    <tr>
+                        <th scope="row">{{nomeAsp}}</th>
+                        <td> <a href="" title="Visualizar unidade"> {{nomeUnidade.nome}} </a></td>
+                        <td>{{funcao}}</td>
+                        <td>{{classe}}</td>
+                        <th>
+                            <a href="/admin/aspirante/editar/{{_id}}"><button type="submit" class="btn btn-success">Editar</button></a>
+                        </th>
+                        <th>
+                            <a href="/admin/aspirante/remover/{{_id}}"><button type="submit" class="btn btn-danger">Remover</button></a>
+                        </th>
+                    </tr>
+                    </tbody>
+                {{else}}
+                    <tbody>
+                    <tr>
+                        <td colspan="4" style="text-align: center">
+                            <h2>Nenhum aspirante encontrado</h2>
+                        </td>
+                    </tr>
+                    </tbody>
+                {{/each}}
+            </table>
+        </div>
+
+
+
+
+
+    </div>
+
+</div>

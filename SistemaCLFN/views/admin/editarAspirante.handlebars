@@ -1,5 +1,5 @@
 <!--suppress ALL -->
-<div class="editarAspirante ">
+<div class="editarAspirante mt-5">
     <h3 class="bg-success text-center col-8 " style="left: 15%">Editar Aspirante</h3>
     <div class="card">
         <div class="card-body ">
@@ -19,7 +19,7 @@
                             <select id="nomeUnidade" class="form-control" name="nomeUnidade">
                                 <option>SEM UNIDADE</option>
                                 {{#each unidades}}
-                                    <option value="{{nome}}">{{nome}}</option>
+                                    <option value="{{_id}}">{{nome}}</option>
                                 {{else}}
 
                                 {{/each}}

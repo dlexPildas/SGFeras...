@@ -2,9 +2,9 @@
 <html lang="pt-br" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <title>Blog</title>
+    <title>SGFeras</title>
     <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/paginaInicial.css">
+    <!--<link rel="stylesheet" href="/css/paginaInicial.css">-->
     <link rel="stylesheet" href="/css/telaUnidades.css">
     <link rel="stylesheet" href="/css/telaAspirantes.css">
 </head>
@@ -13,15 +13,26 @@
 
 
 {{>_navbar}}
-<div class="container mt-4">
+<div class="container-fluid">
 
     {{#if error_msg}}
-        <script>alert('{{error_msg}}')</script>
+
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Que pena :( ...</strong> {{error_msg}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     {{else if success_msg}}
-        <script>alert('{{success_msg}}')</script>
+
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Maravilha!</strong> {{success_msg}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
     {{/if}}
-
-
 
 
 

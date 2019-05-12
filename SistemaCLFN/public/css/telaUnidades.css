@@ -23,6 +23,15 @@
     display: none;
 }
 
+#visualizarUnidade h3{
+    text-align: center;
+    font-family: "Microsoft YaHei Light";
+    margin-bottom: 10%;
+    border-radius: 50px;
+    font-weight: bold;
+    color: white;
+}
+
 #botoesUnidade{
     float: left;
     box-shadow: 10px 10px 8px #888888;
@@ -47,27 +56,6 @@
     border-radius: 50px;
     font-weight: bold;
     color: white;
-}
-
-@media (max-width: 1220px) {
-    #botoesUnidade{
-        display: none;
-    }
-    .tabelaUnidades #listaBotoes{
-        display: block;
-    }
-    .unidades {
-        position: absolute;
-        left: 10%;
-    }
-
-}
-
-@media (max-width: 900px) {
-    .tabelaUnidades td, #colunaC,  #colunaCp, #colunaTM {
-        display: none;
-    }
-
 }
 
 

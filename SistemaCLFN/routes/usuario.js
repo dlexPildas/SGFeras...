@@ -3,6 +3,7 @@ const router = express()
 const mongoose = require('mongoose')
 //const bcrypt = require('bcryptjs')
 const passport = require('passport')
+const fetch = require('node-fetch');
 
 router.get('/login', (req, res)=>{
     res.render('usuario/login')
@@ -21,5 +22,7 @@ router.get('/logout', (req, res)=>{
     req.flash('success_msg', 'Você foi deslogado com sucesso!')
     res.redirect('/')
 })
+
+
 
 module.exports = router
