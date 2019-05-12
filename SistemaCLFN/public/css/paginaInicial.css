@@ -1,68 +1,11 @@
 
-
-
-.corpo{
-    width: 100%;
-
-}
-
-#imagens{
-    position: absolute;
-    width: 40%;
-    height: 340px;
-    left: 30%;
-    top: 15%;
-    box-shadow: 10px 10px 8px #888888;
-    font-family: "Arial Black";
+ h3{
+    text-align: center;
+    font-family: "Microsoft YaHei Light";
+    border-radius: 50px;
+    font-weight: bold;
+    color: white;
 }
 
 
 
-.direcao{
-    position: absolute;
-    left: 8%;
-    top: 15%;
-    width: 20%;
-    z-index: 1;
-}
-.direcao::-webkit-scrollbar{
-    width: 2px;
-
-}
-.card{
-    box-shadow: 10px 10px 8px #888888;
-}
-
-.direcao h3{
-    margin-bottom: 30px;
-}
-
-.artigos{
-    position: absolute;
-    left: 75%;
-    top: 15%;
-    width: 20%;
-    height: 100%;
-}
-
-@media (max-width: 900px) {
-    #imagens{
-        display: none;
-    }
-
-    .artigos{
-        left: 50%;
-        width: 40%;
-        z-index: -1;
-    }
-
-}
-
-@media (max-width: 600px) {
-    .artigos{
-        display: none;
-    }
-    .direcao{
-        left: 30%;
-    }
-}
